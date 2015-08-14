@@ -714,6 +714,7 @@ background-color: #f2f2f5;
 .inner_project{
 	margin: 50px;
 	border-radius: 10px;
+	text-align: center;
 }
 
 .project_list{
