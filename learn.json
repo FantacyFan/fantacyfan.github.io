@@ -1,0 +1,127 @@
+{
+"name":"我的技能",
+"children":
+[
+	{ 
+	  "name":"产品设计" , 
+  	  "_children":
+  	  [
+	  	  	{"name":"原型设计", 
+	  	  		"_children":
+	  	  		[
+	  	  			{"name":"Axure"},
+	  	  			{"name":"Balsamiq"},
+	  	  			{"name":"Sketch"}
+	  	  		]
+	  	  	},
+	  	  	{"name":"平面设计",
+	  	  		"_children":
+	  	  		[
+	  	  			{"name":"Photoshop"},
+	  	  			{"name":"Illustrator"}
+	  	  		]
+	  	  	},
+	  	  	{"name":"用户体验",
+	  	  		"_children":
+	  	  		[
+	  	  			{"name":"可用性测试"},
+	  	  			{"name":"用户采访"},
+	  	  			{"name":"用户研究"}
+	  	  		]
+	  	  	}
+  	  ] 
+  	},
+  	
+	{ 
+		"name":"编程技术" , 
+		"_children":
+		[
+			{
+				"name":"前端",
+				"_children":
+				[
+					{"name":"HTML5"},
+					{"name":"CSS3/Bootstrap"},
+					{"name":"Javascript",
+					"_children":
+					[
+						{"name":"AngularJS"},
+						{"name":"NodeJs"},
+						{"name":"JQuery/JQuery Mobile"},
+						{"name":"D3.js"}
+					]
+					}
+				]
+			},
+			{
+				"name":"后端",
+				"_children":
+				[
+					{"name":"PHP"},
+					{"name":"JAVA"}
+				]
+			},
+			{	
+				"name":"数据库",
+				"_children":
+				[
+					{"name":"MySQL"},
+					{"name":"MongoDB"}
+				]
+			}
+		] 
+	},
+	
+	{ 
+		"name":"数据分析",
+		"_children":
+		[
+			{
+				"name":"Excel"
+			},
+			{
+				"name":"SQL"
+			},
+			{
+				"name":"数据可视化"
+			},
+			{
+				"name":"Matlab"
+			},
+			{
+				"name":"Hadoop/MapReduce"
+			}
+		] 
+	},
+	
+	{ 
+		"name":"其他" , 
+		"_children":
+		[
+			{
+				"name":"英语",
+				"_children":
+				[
+					{"name":"美国生活N年/欧洲任教数月"},
+					{"name":"TOFEL/GRE"}
+				]
+			},
+			{
+				"name":"创业",
+				"_children":
+				[
+					{"name":"创业一次，分管产品设计&运营"}
+				]	
+			},
+			{
+				"name":"演讲&写作",
+				"_children":
+				[
+					{"name":"师从麦肯锡工作10年Communication Specialist"},
+					{"name":"--完成英文即兴&非即兴演讲数十次，写作成绩班级第一"}
+				]
+			}
+		]
+	}
+]
+}
