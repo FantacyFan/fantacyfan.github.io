@@ -748,7 +748,7 @@ background-color: #f2f2f5;
 
 
 
-@media screen and (min-width: 960px){
+@media screen and (min-width: 980px){
 	.project_list{
 		display: block;
 	}
@@ -758,7 +758,7 @@ background-color: #f2f2f5;
 	}
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 980px){
 	.project_list{
 		display: none;
 	}
