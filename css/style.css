@@ -5,8 +5,8 @@ html, body{
 }
 
 .header{
-	height:80px;
-	background-color: #004563;
+	height:85px;
+	background-color: #fff;
 	position: relative;
 	width: 100%;
 }
@@ -21,31 +21,33 @@ html, body{
 .header ul li{
 	display: inline;
 	list-style-type: none;
-	color: white;
+	color: #00a2ff;
 	font-size: 22px;
 	margin: 15px 15px;
 	padding: 15px 15px;
 	font-family: 'Lato', sans-serif;
 	font-weight: 300;
 	font-style: italic;
-/*	border-color: #004563;
-	border-radius: 5px;*/
 }
 
-/*.header ul li:hover{
-	border-color: #white;
-	transition:all 0.3s ease;
+
+.header ul a{
+	color: #00a2ff;
+}
+
+/*.header ul a:hover{
+	text-decoration: none;
 }*/
-
-.header ul li a{
-	color: white;
-}
 
 .navMenu{
 		display: block;
 		width: 50px;
 		float: right;
-	}
+}
+
+.navMenu hr{
+	border-color: #00a2ff;
+}
 
 @media screen and (max-width: 960px){
 	.navMenu{
@@ -69,7 +71,7 @@ html, body{
 }
 
 .topNav{
-	background-color: rgba(20,20,20,0.1);
+	background-color: #fff;
 }
 
 .topNav ul{
@@ -81,7 +83,8 @@ html, body{
 	font-size: 20px;
 	line-height: 55px;
 	padding-left: 20px;
-	color: #004563;
+	color: #fff;
+	background-color:#49bdff; 
 }
 
 .topNav a{
@@ -95,7 +98,7 @@ html, body{
 .topNav a li:hover{
 	text-decoration: none;
 	color: #fff;
-	background-color: rgba(0,69,99,0.3);
+	background-color: #76cdff;
 }
 
 .well{
@@ -128,6 +131,7 @@ html, body{
 
 .stamp_div{
 	width: 100%;
+	margin-top: 30px;
 }
 
 #stamp{
@@ -146,11 +150,11 @@ html, body{
 	width: 65%;
 	margin: auto;
 	text-align: center;
-	margin-top: -50px;
+	margin-top: -70px;
 }
 
 .welcome{
-	color: #004563;
+	color: #fff;
 	font-size: 40px;
 	font-family: 'Lato', sans-serif;
 	font-weight: 700;
@@ -159,7 +163,7 @@ html, body{
 }
 
 .name{
-	color: #004563;
+	color: #fff;
 	font-size: 7vw;
 	font-family: 'Impact', sans-serif;
 	width: 100%;
@@ -184,7 +188,7 @@ html, body{
 }
 
 .footer{
-	background-color: #004563;
+	background-color: #00a2ff;
 	clear: both;
 	position: relative;
 	z-index: 10;
@@ -408,7 +412,7 @@ html, body{
     line-height: 100px;
     margin: 0;
     text-align: center;
-    color: #004563;
+    color: #fff;
     font-weight: 700;
     font-style: italic;
 }
@@ -642,14 +646,27 @@ html, body{
 }*/
 
 /*我的技能*/
+.skills{
+	padding-top: 100px;
+}
+
 .skills h2{
 	text-align: center;
-	margin-bottom: 20px;
-	color: #004563;
+	color: #00a2ff;
 	margin-top: 0px;
 	font-family: 'Lato', sans-serif;
 	font-style: italic;
 	font-weight: 700;
+}
+
+.skills h5{
+	text-align: center;
+	color: #00a2ff;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	font-family: 'Lato', sans-serif;
+	font-style: italic;
+	font-weight: 400;
 }
 
 svg{
@@ -679,7 +696,7 @@ svg{
 
 /*项目经历*/
 .main{
-background-color: #f2f2f5;
+background-color: #fff;
 
 /*background: -ms-linear-gradient(bottom, #fff,  #669db5);*/        /* IE 10 */
 
@@ -700,7 +717,7 @@ background-color: #f2f2f5;
 	text-align: center;
 	margin-top: 100px;
 	margin-bottom: 100px;
-	color: #004563;
+	color: #00a2ff;
 	font-family: 'Lato', sans-serif;
 	font-style: italic;
 	font-weight: 700;

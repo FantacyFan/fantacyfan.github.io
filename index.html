@@ -158,6 +158,7 @@
 			<section class="skills" id="skills">
 				<div class="show_skills">
 					<h2>我的技能卡</h2>
+					<h5>点击节点查看</h5>
 				</div> 
 			</section>
 			</div>			
@@ -338,7 +339,7 @@
 
 	    updateNodes.select("circle")
 	      .attr("r", 8)
-	      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+	      .style("fill", function(d) { return d._children ? "#00a2ff" : "#fff"; });
 
 	    updateNodes.select("text")
 	      .style("fill-opacity", 1);
