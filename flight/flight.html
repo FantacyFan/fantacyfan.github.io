@@ -1,0 +1,512 @@
+	<div style="text-align: center; display: block;">
+		<h1>Domestic Flights in 2014 Quarter 1</h1>
+		<p>Data from the <a href="http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=247&DB_Short_Name=Origin%20and%20Destination%20Survey">Bureau of Transportation Statistics</a>.</p>
+	</div>
+
+	<!-- SVG element -->
+	<div class="container1">
+		<div class="description">
+			<h3> Flight Traffic </h3>
+			We thought it would be interesting to find states with the most air traffic. Here's what we found for domestic flights in 2014. While popular vacation states such as California and Florida show a lot of traffic, large states such as Texas are also very high. This suggests that our data might also be affected by state size. 
+		</div>
+		<div class="map left" id="pass_in">
+			<h4>Incoming Flights</h4>
+		</div>
+		<div class="map right" id="pass_out">
+			<h4>Outgoing Flights</h4>
+		</div>	
+		<div class="description">
+			We mapped differences in incoming and outgoing flights to see if there was an interesting story about which states are attracting or repelling people. 
+			<br><br>
+			We also graphed incoming vs. outgoing passengers. As one would expect outgoing and incoming flights are very related; states have similar numbers of people flying in and out. The market fare is also shown in the graph as the area of the circle. This will be discussed in the next section.
+		</div>
+		<div class="map left" id="pass_diff">
+			<h4>Difference between Outgoing and Incoming Flights</h4>
+		</div>
+		<div class="map right" id="graph">
+			<h4>Incoming Flights vs. Outgoing Flights</h4>
+		</div>
+	</div>
+	<div class="container1">
+		<div class="description">
+			<h3> Flight Fares </h3>
+			Lastly, we wanted to examine average flight fares per state and major cities. The fares of the top 100 major cities are shown by the red circles. Interestingly, we found that the market fare doesn't correlate at all with flight traffic. Hawaii has the highest fare suggesting we might see a correlation if we looked at fare vs. distance traveled. For the most part, however, it seems average fares are very similar for most states.
+		</div>
+		<div class="map left" id="fare">
+			<h4>Market Fare of States</h4>
+		</div>
+		<div class="map right" id="fareGraph">
+			<h4>Market Fare vs. Incoming Flights
+		</div>
+	</div>
+
+<svg style="position: fixed">
+    <defs>
+        <linearGradient id="Gradient-1"
+             x1="0" y1="100%" x2="0" y2="0">
+            <stop offset="0%" stop-color="#f5f5f5" />
+            <stop offset="100%" stop-color="#5ab4ac" />
+        </linearGradient>
+    
+        <linearGradient id="Gradient-2"
+             x1="0" y1="100%" x2="0" y2="0">
+            <stop offset="0%" stop-color="#fbf7ef" />
+            <stop offset="100%" stop-color="#d8b365" />
+        </linearGradient>
+
+        <linearGradient id="Gradient-3"
+             x1="0" y1="100%" x2="0" y2="0">
+            <stop offset="0%" stop-color="#d8b365" />
+            <stop offset="50%" stop-color="#f5f5f5" />
+            <stop offset="100%" stop-color="#5ab4ac" />
+        </linearGradient>
+
+        <linearGradient id="Gradient-4"
+             x1="0" y1="100%" x2="0" y2="0">
+            <stop offset="0%" stop-color="#f5f5f5" />
+            <stop offset="100%" stop-color="#5ab4ac" />
+        </linearGradient>
+    </defs>
+</svg>
+
+
+	
+	<style>
+		h1 {
+			margin-bottom: 5px;
+			color: black;
+		}
+		h4 {
+			text-align: center;
+		}
+		body { 
+			font-family: "Open Sans";
+			background-color: #ffffff; 
+		} 
+		div { 
+			display: inline-block;
+		}
+
+		svg{
+			margin: 0;
+		}
+
+		.map {
+			width: 50%;
+			margin: 0;
+			position: relative;
+			text-align: center;
+		}
+		.left {
+			float: left;
+		}
+		.right {
+			float: right;
+		}
+		.description {
+			width: 100%;
+		}
+		#graph svg{
+			padding-left: 20px;
+		}
+	
+		.container1{
+			border: solid #DBE3F2 1px;
+			padding: 3px;
+			padding-bottom: 15px;
+			z-index: 10;
+			background-color: white;
+			margin: 20px;
+		}
+	
+	</style>
+
+<script>
+	//svg variables
+	var width = 525;
+		height = 375;
+		
+				
+	//map variables
+	var projection = d3.geo.albersUsa().scale(680).translate([width/2.1, height/2.1]);
+	var path = d3.geo.path().projection(projection); //path of USA
+
+	var statesCoord;
+	var flights;
+	
+	d3.json("flight/us.json", function(error, shapes) {	
+		statesCoord = topojson.feature(shapes, shapes.objects.states).features; //long/lat coordinates				
+		//process data
+		d3.csv("flight/flights_processed.csv", function(error, rows) {						
+			//key-value pairs with FIPS as key
+			flights = d3.map(rows,
+				function (d) {
+					return d.FIPS;
+				}
+			);
+			
+			//-------------------INCOMING FLIGHTS MAP------------------//
+			var passengerInScale = d3.scale.linear()
+			.domain(d3.extent(rows, function(d) {return Number(d.passIn);}))
+			.range(["#f5f5f5", "#5ab4ac"]);
+			
+			//draw states	
+			var svg = d3.select("#pass_in").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+			
+			var statePaths = svg.append("g");
+			
+			statePaths.selectAll("path").data(statesCoord).enter()
+			.append("path").attr("d", path)
+			.style("fill", function(state) {	
+				var stateData = flights.get(state.id);
+				if(stateData) {
+					return passengerInScale(stateData.passIn); //scale based on pass-in data
+				}
+			})
+			.style("stroke", "#ccc");
+
+
+			// add state name
+			statePaths.selectAll("text").data(statesCoord).enter()
+			.append("text")
+			.attr("x", function(d){
+				if(!isNaN(path.centroid(d)[0]))
+					return path.centroid(d)[0];
+				else
+					return 9999999;
+			})
+			.attr("y", function(d){
+				if(!isNaN(path.centroid(d)[1]))
+					return path.centroid(d)[1];
+				else
+					return 9999999;
+			})
+			.html(function(state){
+				if(flights.get(state.id))
+				    return flights.get(state.id)['State'];
+				else return '';
+			})
+			.style("font-size", "10px");
+
+
+			svg.append("text")
+			.attr('x', 0)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("1,408,918");
+
+			svg.append("text")
+			.attr('x', 5)
+			.attr('y', 335)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("2,401");
+
+
+			//-------------------OUTGOING FLIGHTS MAP------------------//
+			var passengerOutScale = d3.scale.linear()
+			.domain(d3.extent(rows, function(d) {return Number(d.passOut);}))
+			.range(["#fbf7ef", "#d8b365"]);
+			
+			//draw states	
+			var svg = d3.select("#pass_out").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+			
+			var statePaths = svg.append("g");
+			
+			statePaths.selectAll("path").data(statesCoord).enter()
+			.append("path").attr("d", path)
+			.style("fill", function(state) {	
+				var stateData = flights.get(state.id);
+				if(stateData) {
+					return passengerOutScale(stateData.passOut); //scale based on pass-out data
+				}
+			})
+			.style("stroke", "#ccc");
+
+			// add state name
+			statePaths.selectAll("text").data(statesCoord).enter()
+			.append("text")
+			.attr("x", function(d){
+				if(!isNaN(path.centroid(d)[0]))
+					return path.centroid(d)[0];
+				else
+					return 9999999;
+			})
+			.attr("y", function(d){
+				if(!isNaN(path.centroid(d)[1]))
+					return path.centroid(d)[1];
+				else
+					return 9999999;
+			})
+			.html(function(state){
+				if(flights.get(state.id))
+				    return flights.get(state.id)['State'];
+				else return '';
+			})
+			.style("font-size", "10px");
+
+
+			svg.append("text")
+			.attr('x', 0)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("1,402,517");
+
+			svg.append("text")
+			.attr('x', 5)
+			.attr('y', 335)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("2,404");
+
+			
+			//-------------------DIFFERENCE MAP------------------//
+			var passengerDiffScale = d3.scale.linear()
+			.domain([d3.min(rows, function(d) {return Number(d.passDif);}), 0, d3.max(rows, function(d) {return Number(d.passDif);})])
+			.range(["#d8b365", "#f5f5f5", "#5ab4ac"]);
+			
+			//draw states	
+			var svg = d3.select("#pass_diff").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+			
+			var statePaths = svg.append("g");
+			
+			statePaths.selectAll("path").data(statesCoord).enter()
+			.append("path").attr("d", path)
+			.style("fill", function(state) {	
+				var stateData = flights.get(state.id);
+				if(stateData) {
+					return passengerDiffScale(stateData.passDif); //scale based on pass-dif data
+				}
+			})
+			.style("stroke", "#ccc");
+
+			// add state name
+			statePaths.selectAll("text").data(statesCoord).enter()
+			.append("text")
+			.attr("x", function(d){
+				if(!isNaN(path.centroid(d)[0]))
+					return path.centroid(d)[0];
+				else
+					return 9999999;
+			})
+			.attr("y", function(d){
+				if(!isNaN(path.centroid(d)[1]))
+					return path.centroid(d)[1];
+				else
+					return 9999999;
+			})
+			.html(function(state){
+				if(flights.get(state.id))
+				    return flights.get(state.id)['State'];
+				else return '';
+			})
+			.style("font-size", "10px");
+
+
+			svg.append("text")
+			.attr('x', 0)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("16007 out");
+
+			svg.append("text")
+			.attr('x', 35)
+			.attr('y', 175)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("0");
+
+
+			svg.append("text")
+			.attr('x', 5)
+			.attr('y', 335)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("-6401");
+
+			
+			//-------------------MARKET FARE MAP------------------//
+			var passengerFareScale = d3.scale.linear()
+			.domain([222, d3.max(rows, function(d) {return Number(d.fare);})])
+			.range(["#f5f5f5", "#5ab4ac"]); //min is outlier so use second smallest
+			
+			//draw states	
+			var svg = d3.select("#fare").append("svg")
+			.attr("width", width*1.2)
+			.attr("height", height*1.2)
+			.style("padding-left", "10px");
+			
+			statePaths = svg.append("g");
+			
+			statePaths.selectAll("path").data(statesCoord).enter()
+			.append("path").attr("d", path)
+			.style("fill", function(state) {	
+				var stateData = flights.get(state.id);
+				if(stateData) {
+					return passengerFareScale(stateData.fare); //scale based on market fare data
+				}
+			})
+			.style("stroke", "#ccc");
+
+			// add state name
+			statePaths.selectAll("text").data(statesCoord).enter()
+			.append("text")
+			.attr("x", function(d){
+				if(!isNaN(path.centroid(d)[0]))
+					return path.centroid(d)[0];
+				else
+					return 9999999;
+			})
+			.attr("y", function(d){
+				if(!isNaN(path.centroid(d)[1]))
+					return path.centroid(d)[1];
+				else
+					return 9999999;
+			})
+			.html(function(state){
+				if(flights.get(state.id))
+				    return flights.get(state.id)['State'];
+				else return '';
+			})
+			.style("font-size", "10px");
+
+
+			svg.append("text")
+			.attr('x', 0)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("$396");
+
+			
+
+			svg.append("text")
+			.attr('x', 5)
+			.attr('y', 335)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.text("136");
+
+			
+			//-------------------INCOMING VS. OUTGOING GRAPH------------------//
+			var padding = 20;
+			var gWidth = 550;
+			var gHeight = 375;
+			
+			var xScale = d3.scale.log().domain(d3.extent(rows, function(d) {return Number(d.passIn);})).range([padding, gWidth-padding]);
+			var yScale = d3.scale.log().domain(d3.extent(rows, function(d) {return Number(d.passOut);})).range([gHeight-padding, padding]);
+			var rScale = d3.scale.sqrt().domain(d3.extent(rows, function(d) {return Number(d.fare);})).range([5, 25]);
+			
+			var svg = d3.select("#graph").append("svg").attr("height", gHeight*1.2).attr("width", gWidth*1.2).style("padding-left", "40px").style("padding-bottom", "20px").style("padding-right", "20px").style("font-size", "12px");
+			
+			//draw scale
+			var xAxis = d3.svg.axis().scale(xScale)
+			.orient("bottom");
+			var yAxis = d3.svg.axis().scale(yScale)
+			.orient("left");
+			
+			svg.append("g").attr("class", "axis")
+			.attr("transform", "translate(0," + (gHeight - padding) + ")")
+			.call(xAxis);
+
+			svg.append("text")
+			.attr('x', 440)
+			.attr('y', 390)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("outgoing passengers");
+
+			svg.append("g").attr("class", "axis")
+			.attr("transform", "translate(" + padding + ",0)")
+			.call(yAxis);
+
+			svg.append("text")
+			.attr('x', -30)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("incoming passengers");
+			
+			//draw circles
+			var circles = svg.selectAll().data(rows).enter().append("circle");
+			
+			circles.attr("cx", function(d) { return xScale(d.passIn); })
+			.attr("cy", function(d) { return yScale(d.passOut); })
+			.attr("r", function(d) {return rScale(d.fare);})
+			.style("fill","#5ab4ac")
+			.attr("opacity", 0.3);
+			
+			//-------------------INCOMING VS. FARE GRAPH------------------//
+			var xScale = d3.scale.linear().domain(d3.extent(rows, function(d) {return Number(d.passIn);})).range([padding, gWidth-padding]);
+			var yScale = d3.scale.linear().domain([d3.min(rows, function(d) {return Number(d.fare);}) - 20, d3.max(rows, function(d) {return Number(d.fare);}) + 20]).range([gHeight-padding, padding]);
+			
+			var svg = d3.select("#fareGraph").append("svg").attr("height", gHeight*1.5).attr("width", gWidth*1.5).style("padding-left", "30px").style("padding-bottom", "20px").style("padding-right", "20px").style("font-size", "12px");
+			
+			//draw scale
+			var xAxis = d3.svg.axis().scale(xScale)
+			.orient("bottom");
+			var yAxis = d3.svg.axis().scale(yScale)
+			.orient("left");
+			
+			svg.append("g").attr("class", "axis")
+			.attr("transform", "translate(0," + (gHeight - padding) + ")")
+			.call(xAxis);
+
+			svg.append("text")
+			.attr('x', 440)
+			.attr('y', 390)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("passengers");
+
+			svg.append("g").attr("class", "axis")
+			.attr("transform", "translate(" + padding + ",0)")
+			.call(yAxis);
+
+			svg.append("text")
+			.attr('x', 0)
+			.attr('y', 11)
+			.attr('font-size', 11)
+			.style("fill", "black")
+			.html("fare");
+			
+			//draw circles
+			var circles = svg.selectAll().data(rows).enter().append("circle");
+			
+			circles.attr("cx", function(d) { return xScale(d.passIn); })
+			.attr("cy", function(d) { return yScale(d.fare); })
+			.attr("r", 10)
+			.style("fill","#5ab4ac")
+			.attr("opacity", 0.3);
+			
+		});
+		
+		//-------------------CITY BUBBLES------------------//
+		d3.csv("flight/flightsfare_small.csv", function(error, rows) {
+			var bubbles = d3.select("#fare").select("svg").selectAll(".dot").data(rows).enter().append("circle");
+
+			bubbles.attr("transform", function(d) {
+    			return "translate(" + projection([d.long, d.lat]) + ")"
+    		})
+			.attr("r",function(d) {
+				if(d.avg_fare-200 < 0) {
+					return 5;
+				}else {
+					return Math.pow(d.avg_fare-200,2)/5000+5;
+				}
+			})
+			.style("fill","#b45a62")
+			.attr("opacity", 0.5);
+		});
+	});
+</script>
+
