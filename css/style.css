@@ -33,6 +33,14 @@ html, body{
 
 .header ul a{
 	color: #00a2ff;
+	padding: 15px;
+	border: 2px solid #fff; 
+}
+
+.header ul a:hover{
+	border: 2px solid #00a2ff; 
+	text-decoration: none;
+	border-radius: 10px;
 }
 
 /*.header ul a:hover{
@@ -84,7 +92,7 @@ html, body{
 	line-height: 55px;
 	padding-left: 20px;
 	color: #fff;
-	background-color:#2ea9ff; 
+	background-color:#49bdff; 
 }
 
 .topNav a{
