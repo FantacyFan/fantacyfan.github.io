@@ -5,10 +5,16 @@ html, body{
 }
 
 .header{
-	height:85px;
+	height:75px;
 	background-color: #fff;
 	position: relative;
 	width: 100%;
+}
+
+@media screen and (max-width: 981px){
+	.header{
+		height: 8.5vw;
+	}
 }
 
 .header ul{
@@ -49,7 +55,7 @@ html, body{
 
 .navMenu{
 		display: block;
-		width: 50px;
+		width: 5vw;
 		float: right;
 }
 
@@ -57,10 +63,16 @@ html, body{
 	border-color: #00a2ff;
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 981px){
 	.navMenu{
 		display: block;
-		width: 50px;
+		width: 5vw;
+	}
+
+	.navMenu hr{
+		border-color: #00a2ff;
+		margin-top: 2vw;
+		margin-bottom: 2vw;
 	}
 
 	nav{
@@ -68,7 +80,7 @@ html, body{
 	}
 }
 
-@media screen and (min-width: 960px){
+@media screen and (min-width: 981px){
 	.navMenu{
 		display: none;
 	}
@@ -88,8 +100,8 @@ html, body{
 }
 
 .topNav ul li{
-	font-size: 20px;
-	line-height: 55px;
+	font-size: 2vw;
+	line-height: 5.5vw;
 	padding-left: 20px;
 	color: #fff;
 	background-color:#49bdff; 
@@ -116,7 +128,7 @@ html, body{
 	border: none;
 }
 
-@media screen and (min-width: 960px){
+@media screen and (min-width: 981px){
 	.topNav{
 		display: none;
 	}
@@ -149,6 +161,18 @@ html, body{
 	margin-left: 50px;
 }
 
+@media screen and (max-width: 981px){
+	.stamp_div{
+		margin-top: 3vw;
+	}
+	#stamp{
+		width:8vw;
+		margin: 10px 0;
+		text-align: center;
+		margin-left: 3vw;
+	}
+}
+
 .wrapper{
 	width: 100%;
 	position: relative;
@@ -158,7 +182,14 @@ html, body{
 	width: 65%;
 	margin: auto;
 	text-align: center;
-	margin-top: -70px;
+	margin-top: -50px;
+}
+
+
+@media screen and (max-width: 981px){
+	.wrapper .main_bg{
+		margin-top: -10vw;
+	}
 }
 
 .welcome{
@@ -179,6 +210,17 @@ html, body{
 	font-style: bold;
 	line-height: 100px;
 	letter-spacing: 4px;
+}
+
+@media screen and (max-width: 981px){
+	.welcome{
+		font-size: 5vw;
+		line-height: 10vw;
+	}
+	.name{
+		font-size: 6vw;
+		line-height: 9vw;
+	}
 }
 
 .bg_img{
@@ -220,8 +262,9 @@ html, body{
     -ms-transform: rotate(180deg);
     -o-transform: rotate(180deg);
     transform: rotate(180deg);
-    float: left;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 #corner_3{
@@ -231,21 +274,14 @@ html, body{
     -ms-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     transform: rotate(90deg);
-    float: right;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 #corner_4{
 	width: 70px;
 	float: right;
-}
-
-/*.col-md-4{
-	padding: 0 !important;
-}*/
-
-.social{
-	text-align: center;
 }
 
 .social .text{
@@ -286,11 +322,6 @@ html, body{
 
 .contact .icons{
 	line-height: 60px;
-}
-
-#pdf{
-	width: 30px;
-	margin: 10px;
 }
 
 #facebook, #linkedin, #googleplus, #wechat{
@@ -372,6 +403,7 @@ html, body{
 
 .social{
 	margin-bottom: 30px;
+	text-align: center;
 }
 
 .cell{
@@ -388,13 +420,70 @@ html, body{
 	line-height: 60px;
 }
 
+@media screen and (max-width: 981px){
+	#corner_1, #corner_2, #corner_3, #corner_4{
+		width: 7vw;
+	}
+
+	#corner_2{
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+
+	#corner_3{
+		position: absolute;
+		right: 0;
+		bottom: 0;
+	}
+
+	.footer .copyright{
+		line-height: 6vw;
+		font-size: 1.5vw;
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.text{
+		font-size: 2.5vw;
+	}
+
+	.social .text{
+		font-size: 2.5vw;
+	}
+
+	.resume .text{
+		font-size: 2.5vw;
+	}
+
+	#facebook, #linkedin, #googleplus, #wechat{
+		width: 4.6vw;
+		height: 4.6vw;
+		border-radius: 2.3vw;
+		margin: 1vw;
+	}
+
+	#pdf{
+		width: 4.6vw;
+		height: 4.6vw;
+		margin: 1vw;
+	}
+}
+
 .content {
     width: 100%;
-    font-size: 3vw;
+    font-size: 30px;
     line-height: 40px;
     font-family: 'Lato', sans-serif;
     color: #004563;
     height: 40px;
+}
+
+@media screen and (max-width: 981px){
+	.content{
+		font-size: 3vw;
+		line-height: 4vw;
+	}
 }
 
 .visible {
@@ -424,6 +513,7 @@ html, body{
     font-weight: 700;
     font-style: italic;
 }
+
 @-webkit-keyframes opacity {
     0% {
         opacity: 0;
@@ -513,8 +603,14 @@ html, body{
     overflow: hidden;
     height: 550px;
     width: 100%;
-
 }
+
+@media screen and (max-width: 981px){
+	.home{
+		height: 50vw;
+	}
+}
+
 
 
 /*关于本然*/
@@ -721,6 +817,30 @@ background-color: #d0eeff;
 	font-weight: 700;
 }
 
+@media screen and (max-width: 981px){
+	.projects{
+		padding-bottom: 5vw;
+	}
+
+	.skills{
+		padding-top: 5vw;
+	}
+
+	.projects h2{
+		margin-top: 10vw;
+		margin-bottom: 10vw;
+		font-size: 5vw;
+	}
+
+	.skills h2{
+		font-size: 5vw;
+	}
+
+	.skills h5{
+		font-size: 2vw;
+	}
+}
+
 .project_wrapper{
 	width: 100%;
 	margin-top: 0px;
@@ -738,7 +858,7 @@ background-color: #d0eeff;
 	margin-bottom: 50px;
 }
 
-@media screen and (min-width: 960px){
+@media screen and (min-width: 981px){
 	.line{
 		width: 40%;
 	}
@@ -782,7 +902,7 @@ background-color: #d0eeff;
 		z-index: 100000;
 		width: 100%;
 		height: 200px;
-		padding-top: 5%;
+		padding-top: 2vw;
 		color:white;
 		font-family:sans-serif;
 		font-size:20px;
@@ -792,6 +912,8 @@ background-color: #d0eeff;
 		-webkit-transform: scale(0);
 		border-radius: 0;
 	}
+
+
 
 	#item1-overlay {
 		background: rgba(255,130,130,.85);
@@ -826,20 +948,28 @@ background-color: #d0eeff;
 	}
 }
 
-@media screen and (max-width: 960px){
+@media screen and (max-width: 981px){
 	.line{
 		width: 40%;
 	}
 
 	.project-name{
 		font-weight: 700;
-		font-size: 20px;
+		font-size: 2.5vw;
 	}
 
 	.project-class{
 		font-weight: 400;
 		font-style: italic;
-		font-size: 16px;
+		font-size: 1.5vw;
+	}
+
+	#item1-overlay hr, #item2-overlay hr,
+	#item3-overlay hr, #item4-overlay hr,
+	#item5-overlay hr, #item6-overlay hr,
+	#item7-overlay hr, #item8-overlay hr{
+		margin-top: 1.2vw;
+		margin-bottom: 1.2vw;
 	}
 
 	#item1, #item2, #item3, #item4, #item5, #item6, #item7, #item8{
@@ -871,9 +1001,8 @@ background-color: #d0eeff;
 		width: 100%;
 		height: 100%;
 		color:white;
-		padding-top: 5%;
+		padding-top: 2.5vw;
 		font-family:sans-serif;
-		font-size:20px;
 		font-weight:bold;
 		text-align:center;
 		transition: all 0.35s ease-in-out;
@@ -933,7 +1062,7 @@ background-color: #d0eeff;
 
 	.sm_project_list{
 		display: block;
-		margin-bottom: 50px;
+		margin-bottom: 5vw;
 	}
 }
 
