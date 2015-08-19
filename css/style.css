@@ -705,21 +705,12 @@ svg{
 /*项目经历*/
 .main{
 background-color: #fff;
-
-/*background: -ms-linear-gradient(bottom, #fff,  #669db5);*/        /* IE 10 */
-
-/*background:-moz-linear-gradient(bottom,#fff,#669db5);*/ /*火狐*/ 
-
-/*background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#669db5), to(#fff));*/ /*谷歌*/ 
-
-/*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#669db5), to(#fff));*/      /* Safari 4-5, Chrome 1-9*/
-
-/*background: -webkit-linear-gradient(bottom, #fff, #669db5); */  /*Safari5.1 Chrome 10+*/
-
-/*background: -o-linear-gradient(bottom, #fff, #669db5);*/  /*Opera 11.10+*/
-
 } 
 
+.projects{
+	background-color: #f2f2f5;
+	padding-bottom: 100px;
+}
 
 .projects h2{
 	text-align: center;
@@ -749,25 +740,178 @@ background-color: #fff;
 }
 
 @media screen and (min-width: 960px){
+	.line{
+		width: 40%;
+	}
+
+	.project-name{
+		font-weight: 700;
+		font-size: 20px;
+	}
+
+	.project-class{
+		font-weight: 400;
+		font-style: italic;
+		font-size: 16px;
+	}
+
 	#item1, #item2, #item3, #item4, #item5, #item6, #item7, #item8{
 		padding-bottom: 0px;
 	}
 
-	.item1, .item2, .item3, .item4, .item5, .item6, .item7, .item8{
+	.item{
 		text-align: center;
 		padding-left: 0px;
 		padding-right: 0px;
+		position:relative;
+	}
+
+	.item:hover #item1-overlay, .item:hover #item2-overlay, .item:hover #item3-overlay,
+	.item:hover #item4-overlay, .item:hover #item5-overlay, .item:hover #item6-overlay,
+	.item:hover #item7-overlay, .item:hover #item8-overlay
+
+	{
+	    -webkit-transform: scale(0.9);
+	}
+
+	#item1-overlay, #item2-overlay,
+	#item3-overlay, #item4-overlay,
+	#item5-overlay, #item6-overlay,
+	#item7-overlay, #item8-overlay {
+		position: absolute;
+		top: 0px;
+		z-index: 100000;
+		width: 100%;
+		height: 200px;
+		padding-top: 5%;
+		color:white;
+		font-family:sans-serif;
+		font-size:20px;
+		font-weight:bold;
+		text-align:center;
+		transition: all 0.35s ease-in-out;
+		-webkit-transform: scale(0);
+		border-radius: 0;
+	}
+
+	#item1-overlay {
+		background: rgba(255,130,130,.85);
+	}
+
+	#item2-overlay {
+		background: rgba(140,140,140,.85);
+	}
+
+	#item3-overlay {
+		background: rgba(233,116,232,.85);
+	}
+
+	#item4-overlay {
+		background: rgba(243,212,37,.85);
+	}
+
+	#item5-overlay {
+		background: rgba(105,186,80,.85);
+	}
+
+	#item6-overlay {
+		background: rgba(132,134,128,.85);
+	}
+
+	#item7-overlay {
+		background: rgba(2,176,249,.85);
+	}
+
+	#item8-overlay {
+		background: rgba(254,80,4,.85);
 	}
 }
 
 @media screen and (max-width: 960px){
+	.line{
+		width: 40%;
+	}
+
+	.project-name{
+		font-weight: 700;
+		font-size: 20px;
+	}
+
+	.project-class{
+		font-weight: 400;
+		font-style: italic;
+		font-size: 16px;
+	}
+
 	#item1, #item2, #item3, #item4, #item5, #item6, #item7, #item8{
 		width: 100%;
 	}
 
-	.item1, .item2, .item3, .item4, .item5, .item6, .item7, .item8{
-		width: 40%;
+	.item{
+		width: 50%;
 		margin: 0 auto;
+		position:relative;
+		text-align: center;
+	}
+
+	.item:hover #item1-overlay, .item:hover #item2-overlay, .item:hover #item3-overlay,
+	.item:hover #item4-overlay, .item:hover #item5-overlay, .item:hover #item6-overlay,
+	.item:hover #item7-overlay, .item:hover #item8-overlay
+
+	{
+	    -webkit-transform: scale(0.9);
+	}
+
+	#item1-overlay, #item2-overlay,
+	#item3-overlay, #item4-overlay,
+	#item5-overlay, #item6-overlay,
+	#item7-overlay, #item8-overlay {
+		position: absolute;
+		top: 0px;
+		z-index: 100000;
+		width: 100%;
+		height: 100%;
+		color:white;
+		padding-top: 5%;
+		font-family:sans-serif;
+		font-size:20px;
+		font-weight:bold;
+		text-align:center;
+		transition: all 0.35s ease-in-out;
+		-webkit-transform: scale(0);
+		border-radius: 0;
+	}
+
+	#item1-overlay {
+		background: rgba(255,130,130,.85);
+	}
+
+	#item2-overlay {
+		background: rgba(140,140,140,.85);
+	}
+
+	#item3-overlay {
+		background: rgba(233,116,232,.85);
+	}
+
+	#item4-overlay {
+		background: rgba(243,212,37,.85);
+	}
+
+	#item5-overlay {
+		background: rgba(105,186,80,.85);
+	}
+
+	#item6-overlay {
+		background: rgba(132,134,128,.85);
+	}
+
+	#item7-overlay {
+		background: rgba(2,176,249,.85);
+	}
+
+	#item8-overlay {
+		background: rgba(254,80,4,.85);
 	}
 }
 
@@ -793,6 +937,20 @@ background-color: #fff;
 		margin-bottom: 50px;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
