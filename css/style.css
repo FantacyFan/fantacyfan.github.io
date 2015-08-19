@@ -655,7 +655,7 @@ html, body{
 
 /*我的技能*/
 .skills{
-	padding-top: 100px;
+	padding-top: 50px;
 }
 
 .skills h2{
@@ -704,12 +704,11 @@ svg{
 
 /*项目经历*/
 .main{
-background-color: #fff;
+background-color: #d0eeff;
 } 
 
 .projects{
-	background-color: #f2f2f5;
-	padding-bottom: 100px;
+	padding-bottom: 50px;
 }
 
 .projects h2{
