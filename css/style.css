@@ -864,8 +864,8 @@ background-color: #d0eeff;
 	#item3-overlay hr, #item4-overlay hr,
 	#item5-overlay hr, #item6-overlay hr,
 	#item7-overlay hr, #item8-overlay hr{
-		margin-top: 1vw;
-		margin-bottom: 1vw;
+		margin-top: 0;
+		margin-bottom: 0;
 	}
 
 	#item1, #item2, #item3, #item4, #item5, #item6, #item7, #item8{
