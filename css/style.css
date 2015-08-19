@@ -305,7 +305,6 @@ html, body{
 
 .resume{
 	text-align: center;
-	top:-40px;
 }
 
 .resume .text{
@@ -314,10 +313,11 @@ html, body{
 	font-weight: 700;
 	font-size: 15px;
 	font-style: italic;
+	line-height: 80px;
 }
 
 .icons{
-	line-height: 130px;
+	line-height: 100px;
 }
 
 .contact .icons{
@@ -402,6 +402,7 @@ html, body{
 }
 
 .social{
+	margin-top: 40px;
 	margin-bottom: 30px;
 	text-align: center;
 }
@@ -448,6 +449,11 @@ html, body{
 		font-size: 2.5vw;
 	}
 
+	.social{
+		margin-bottom: 3vw;
+		margin-top: 4vw;
+	}
+
 	.social .text{
 		font-size: 2.5vw;
 	}
@@ -456,17 +462,45 @@ html, body{
 		font-size: 2.5vw;
 	}
 
+	.social .icons{
+		line-height: 16vw;
+	}
+
 	#facebook, #linkedin, #googleplus, #wechat{
-		width: 4.6vw;
-		height: 4.6vw;
-		border-radius: 2.3vw;
-		margin: 1vw;
+		width: 5.6vw;
+		height: 5.6vw;
+		border-radius: 2.8vw;
+		margin: 1.2vw;
 	}
 
 	#pdf{
-		width: 4.6vw;
-		height: 4.6vw;
-		margin: 1vw;
+		width: 5.6vw;
+		height: 5.6vw;
+		margin: 1.2vw;
+	}
+
+	#email, #cell{
+		width: 5vw;
+	}
+
+	.contact .icons{
+		line-height: 8vw;
+	}
+
+	.cell{
+		margin-bottom: 7vw;
+	}
+
+	.resume{
+		top: -4vw;
+	}
+
+	.resume .icons{
+		line-height: 16vw;
+	}
+
+	.resume .text{
+		line-height: 8vw;
 	}
 }
 
@@ -610,144 +644,6 @@ html, body{
 		height: 50vw;
 	}
 }
-
-
-
-/*关于本然*/
-/*.about{
-	background-color: #fff;
-	padding-bottom: 100px;
-}
-
-.about h2{
-	text-align: center;
-	padding-top: 100px;
-	padding-bottom: 100px;
-	color: #004563;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-#bupt, #qmul, #cornell, #meridian{
-	width: 110px;
-	margin-top: 30px;
-	margin-left: 0;
-	margin-right: 0;
-}
-
-#cs{
-	width: 160px;
-	margin: 30px;
-}
-
-#edu-info{
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.school, .org{
-	width: 100%;
-	margin: 0 auto;
-	text-align: center;
-}
-
-.title{
-	color: #004563;
-	text-align: center;
-}
-
-.school-logo, .org-logo{
-	display: inline-block;
-}
-
-.school-story, .org-story{
-	padding: 20px 70px !important;
-}
-
-.school-story p{
-	text-align: left;
-	margin: 0;
-}
-
-.bachelor, .org2{
-	margin-top: 50px !important;
-}
-
-#self-info{
-	margin-top: 20px;
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.line{
-	width: 80%;
-	border-color:rgba(0,50,71,0.3);
-}		#bupt, #qmul, #cornell, #meridian{
-	width: 110px;
-	margin-top: 30px;
-	margin-left: 0;
-	margin-right: 0;
-}
-
-#cs{
-	width: 160px;
-	margin: 30px;
-}
-
-#edu-info{
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.school, .org{
-	width: 100%;
-	margin: 0 auto;
-	text-align: center;
-}
-
-.title{
-	color: #004563;
-	text-align: center;
-}
-
-.school-logo, .org-logo{
-	display: inline-block;
-}
-
-.school-story, .org-story{
-	padding: 20px 70px !important;
-}
-
-.school-story p{
-	text-align: left;
-	margin: 0;
-}
-
-.bachelor, .org2{
-	margin-top: 50px !important;
-}
-
-#work-info{
-	margin-top: 20px;
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-#self-info{
-	margin-top: 20px;
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.line{
-	width: 80%;
-	border-color:rgba(0,50,71,0.3);
-}*/
 
 /*我的技能*/
 .skills{
