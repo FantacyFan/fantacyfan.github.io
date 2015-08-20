@@ -873,7 +873,8 @@ background-color: #d0eeff;
 	}
 
 	.item{
-		width: 50%;
+		width: 49%;
+		display: inline-block;
 		margin: 0 auto;
 		position:relative;
 		text-align: center;
