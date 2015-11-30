@@ -728,33 +728,46 @@ footer span.copyright {
     line-height: 40px;
 }
 
-footer ul.quicklinks {
-    margin-bottom: 0;
-    text-transform: uppercase;
-    text-transform: none;
-    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
-    line-height: 40px;
+
+.list-inline .quicklinks{
+    width: 50%;
+    position: relative;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 5px;
+    background-color: #808080;
 }
 
-footer ul.quicklinks a{
-    color: #000;
+.list-inline .quicklinks:hover{
+    background-color: #fed136;
+}
+
+.quicklinks a{
+    color: #fff;
     text-decoration: none;
+    font-weight: 900;
+    font-size: 25px;
 }
 
 ul.social-buttons {
     margin-bottom: 0;
+    text-align: center;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
 ul.social-buttons li a {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 100%;
-    font-size: 20px;
+    font-size: 30px;
     line-height: 40px;
     outline: 0;
     color: #fff;
-    background-color: #222;
+    background-color: #808080;
     -webkit-transition: all .3s;
     -moz-transition: all .3s;
     transition: all .3s;
@@ -764,6 +777,14 @@ ul.social-buttons li a:hover,
 ul.social-buttons li a:focus,
 ul.social-buttons li a:active {
     background-color: #fed136;
+}
+
+.social-button{
+    padding-top: 15px;
+}
+
+#social-buttun-2{
+    padding-top: 0px;
 }
 
 .btn:focus,
@@ -870,3 +891,9 @@ img::-moz-selection {
 body {
     webkit-tap-highlight-color: #fed136;
 }
+
+#container {
+    width:auto; 
+    height: 250px; 
+    border: 20px solid #808080;
+}  
