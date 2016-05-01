@@ -1,0 +1,120 @@
+body{
+  background-color: #202B33;
+}
+
+ul, li {
+  list-style: none; }
+
+svg {
+  display: block; }
+
+.circle {
+  z-index: 100; }
+
+.line {
+  z-index: -100; }
+
+#threshold {
+  left: 10;
+  top: 10; }
+
+.header h1 {
+  font-size: 1.5em;
+  color: rgb(174, 202, 237);
+  margin: 30px 0px; }
+
+#firms {
+  height: 600px;
+  padding: 0 40px;
+  overflow: scroll; }
+  #firms ul li {
+    text-align: left; 
+    line-height: 1.5em;
+  }
+    #firms ul li span {
+      font-size: 0.7em;
+      display: inline-block;
+      width: 19%;
+      vertical-align: top;
+      padding: 0 15px;
+    }
+
+.firmList {
+  height: 500px;
+  overflow: scroll; }
+  .firmList li {
+    color: rgba(174, 202, 237,0.5); }
+    .firmList li:hover {
+      background-color: rgba(174, 202, 237,0.7);
+      color: white; }
+
+.firmTitle li{
+  font-size: 1.2em;
+  color:rgb(174, 202, 237);
+}
+
+.axis {
+  font: 10px sans-serif; }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.nodeCircle:hover {
+  cursor: pointer; }
+
+/*# sourceMappingURL=style.css.map */
+
+#lineVisu{
+  margin: 0 auto;
+}
+
+#barVisu{
+  margin: 0 auto;
+}
+
+/*.line{
+  stroke: rgb(174, 202, 237);
+  stroke-width: 1px;
+}
+*/
+.tick{
+  font-size: 1.2em;
+}
+
+.domain{
+  stroke: rgb(174, 202, 237);
+  stroke-width: 1px;
+}
+
+     
+/*  .x.axis line {
+     stroke: green;
+     stroke-width: 1.0;
+  }
+    
+  .x.axis path {
+    display: none;
+  }*/
+
+  .x.axis line, .x.axis path {
+     fill: none;
+     stroke: rgba(174, 202, 237, 0.1);
+     stroke-width: 2;
+  }
+     
+  .y.axis line, .y.axis path {
+     fill: none;
+     stroke: rgba(174, 202, 237, 0.1);
+     stroke-width: 2;
+  }
+
+  .x.axis text, .y.axis text{
+    fill:rgba(174, 202, 237, 1);
+  }
+
+
+ 
+ 
