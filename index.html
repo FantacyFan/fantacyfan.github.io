@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"> 
 <title>Data Visualization</title>
-<link rel="stylesheet" href="style/style.css">
 <link rel="stylesheet" href="style/Grid.css">
+<link rel="stylesheet" href="style/style.css">
 <script type="text/javascript" src="js/angular.min.js" ></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="js/app.js"></script>
@@ -16,7 +16,8 @@
     <div class="row">
       <div class="col-10 col-offset-1">
         <div class="header">
-          <h1>创投行业关系及布局分析</h1>
+          <h1>投资机构关系及投资领域分析<br>Alpha Version</h1>
+          <p id="intro1">数据来源:<a href="www.itjuzi.com">IT桔子</a></p>
         </div>
       </div>
     </div>
@@ -24,7 +25,9 @@
       <div class="row">
         
         <div class="col-6" id="bubbles">
+          <h1 class="colorYellow tipName">投资总次数大于{{threshold}}</h1>
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
+          <h1 class="colorYellow tipName">{{vcName}}</h1>
         </div>
         <div class="col-6" id="firms">
           <div ng-if="!flag">
@@ -61,14 +64,14 @@
     <section>
       <div class="row">
         <div class="col-12">
-          <select name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
+          <h1 class="colorYellow">{{vcName}}<span id="trend">投资趋势变化</span></h1><h1 id="selection"><span id="trend">投资领域</span>{{selectDomain}}</h1>
+          <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
             <option value="all">All</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
           </select>
 
         </div>
         <div class="col-12">
-            <h1 id="selection">{{selectDomain}}</h1>
             <div id="lineChart">
               <svg id="lineVisu" width="1000" height="400"></svg>
             </div>

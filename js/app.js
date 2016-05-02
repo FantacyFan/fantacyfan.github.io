@@ -11,7 +11,7 @@
 
     // var width =document.getElementById("bubbles").offsetWidth;
     var width=700;
-    var height = 600;
+    var height = 400;
 
 
     var svg = d3.select("#bubbles")
@@ -219,6 +219,8 @@
               .call(force.drag)
               .on("click", function(d){
                 $scope.flag=true;
+                $scope.vcName = d.name;
+                // console.log(d);
                 $scope.combinations = combinationGetter[d.index].combinations;
                 $scope.$apply();
                // not finshed yet
@@ -457,7 +459,7 @@ function drawLine(filterYear,filterDomain){
 
       yScale = d3.scale.pow().exponent(.2)
         .range([chartHeight - margin.top, margin.bottom])
-        .domain([0,(d3.extent(count)[1])/domainLength*2]),
+        .domain([0,(d3.extent(count)[1])/domainLength*2.5]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
