@@ -1,0 +1,879 @@
+<html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+  <!-- Load the d3 library. -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  
+  <style>
+    body { 
+      font-family: 'Open Sans', sans-serif;
+      background-color: #ffffff; 
+      margin-top: 30px;
+    }   
+    .arealegend {
+      text-anchor: start;
+    font-size: 14px;
+    }
+    .axis path { 
+      fill: none; stroke: #777; 
+    }
+    .axis line { 
+      stroke: #777; 
+    }
+    svg {
+      font-size: 11px;
+    }
+    #usmap {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    h1 {
+      font-weight: lighter;
+      text-align: center;
+    }
+    h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #detail {
+      margin-bottom: 90px;
+      padding-top: 10px;
+    }
+    #areachart {
+      width: 100%;
+      margin-bottom: 60px;
+    }
+    #charts {
+      width: 100%;
+      padding-top: 60px;
+      text-align: center;
+    }
+    .legend {
+    font-size: 12px;
+    }
+    rect{
+      stroke-width: 2;
+    }
+  .bubble {
+    fill: rgb(105, 191, 199);
+    opacity: 0.6;
+  }
+  .alabel { 
+    font-size: 16px;
+    color: rgb(185, 185, 185);
+    text-weight: 500;
+  }
+  text {
+    text-anchor: middle;
+  }
+  #tooltip {
+	position: absolute;
+	background-color: "white";
+	font-size: 16px;
+	text-align: end;
+	text-weight: 600;
+  }
+  </style>
+  
+<script>
+  var mapSvg;   
+  var areaSvg;
+  var causeSvg;
+  var yearSvg;
+  /////////////////DRAW INITIAL MAP/////////////////
+  //svg variables
+  var mapWidth = 1050,
+    mapHeight = 530;
+        
+  //map variables
+  var projection = d3.geo.albersUsa().scale(1000).translate([mapWidth/2.1, mapHeight/2.1]);
+  var path = d3.geo.path().projection(projection); //path of USA
+  var regionByState = d3.map();
+  var statesCoord;
+  var states;
+  
+  d3.json("us.json", function(error, shapes) {  
+    statesCoord = topojson.feature(shapes, shapes.objects.states).features; //long/lat coordinates
+    
+    d3.csv("usregions.csv", function(error, rows) {
+      states = d3.map(rows,function(d){
+        return d.id;
+      })
+      console.log(states);
+      var mapSvg = d3.select("#usmap").append("svg")
+        .attr("width", mapWidth)
+        .attr("height", mapHeight);
+      
+      var statePaths = mapSvg.append("g");
+    
+    //US regions
+      statePaths.selectAll("path").data(statesCoord).enter()
+      .append("path").attr("d", path)
+      .attr("class",function(state){
+        var regionData = states.get(state.id);
+        if(states.get(state.id))
+            return states.get(state.id)['Region'];
+        else return '';
+      })
+      .style("fill", "#E6E6E6")
+      .style("stroke", "#ccc")
+      .on("mouseover", function() {
+        var regionName = d3.select(this).attr("class");
+        d3.selectAll("."+regionName)
+          .style("fill", "#d2d2d2");
+      })
+      .on('mouseout',function() {
+        var regionName = d3.select(this).attr("class");
+        d3.selectAll("."+regionName)
+          .style("fill", "#E6E6E6");
+      })
+      .on("click",function(d){
+          var regionName = d3.select(this).attr("class");
+          d3.csv("USDeathsProcessed.csv", function(error,row) {
+            var regionFilter;
+            
+            if(regionName=="Northeast")
+              regionFilter = filterRegion(row,true,false,false,false);
+            else if (regionName=="West")
+              regionFilter = filterRegion(row,false,true,false,false);
+            else if (regionName=="Midwest")
+              regionFilter = filterRegion(row,false,false,true,false);
+            else if (regionName=="South")
+              regionFilter = filterRegion(row,false,false,false,true);
+        
+      drawAreaChart2(regionFilter, regionName);
+      });
+          smoothScroll("#detail");
+      });
+    
+    //NYC circle
+      mapSvg.append("circle")
+        .attr("transform",function() {
+            return "translate(" + projection([-74.0059700, 40.7142700]) + ")";
+          })
+        .attr("r",20)
+        .attr("id","nyc")
+        .style("fill","#69BFC7")
+        .style("opacity","0.8")
+        .on("mouseover", function(){
+          d3.select(this).style("fill","#4FA9B0");
+        })
+        .on("mouseout", function(){
+          d3.select(this).style("fill","#69BFC7");
+        })
+        .on("click", function() {
+          d3.csv("NYCDeaths.csv", function(error, rows) { 
+            drawAreaChart2(rows, "New York City");
+          });
+          smoothScroll("#detail");
+        });
+    });
+  });
+  
+  /////////////////HELPER FUNCTIONS/////////////////
+  /**
+   * scrolls to the parameter div
+   */
+  var smoothScroll = function(div) {
+    $("html,body").animate({
+      scrollTop: $(div).offset().top
+    }, 1000);  
+  };
+  
+  /** 
+   * NE, W, ME, S should be booleans indicating whether to filter by that region
+   * returns an array of the filtered data
+   */
+  var filterRegion = function(data, NE, W, ME, S) {
+    var regionFilter = new Array();
+    data.forEach(function(r) {
+      if(NE && r.Region == "Northeast")
+        regionFilter.push(r);
+      else if(W && r.Region == "West")
+        regionFilter.push(r);
+      else if(ME && r.Region =="Midwest")
+        regionFilter.push(r);
+      else if(S && r.Region == "South")
+        regionFilter.push(r);
+    });
+    
+    return regionFilter;
+  };
+  
+  /** 
+   * cause should be a string of the cause to filter by
+   * returns an array of the filtered data
+   */ 
+  var filterCause = function(data, cause) {
+    var causeFilter = new Array();
+    
+    data.forEach(function(r) {
+      if(r.Cause != null && r.Cause.trim() == cause)
+        causeFilter.push(r);
+    });
+    
+    return causeFilter;
+  };
+  /** 
+   * combines all the year data
+   * returns an array of objects with objects containing Year and Count
+   */
+  var combineYear = function(data) {
+    var combinedYear = new Array();
+    
+    data.forEach(function(r) {
+      var year = Number(r.Year);
+      var count = Number(r.Count);
+      
+      //find index
+      var index = -1;
+    
+      combinedYear.forEach(function(r, i) {
+        if(r.Year == year) {
+          index = i;
+        }
+      });
+      
+      //add to combine array
+      if(index == -1)
+        combinedYear.push({"Year": year, "Count": count});  
+      else 
+        combinedYear[index].Count += count; 
+    });
+    
+    combinedYear.sort(function(a, b) {return a.Year - b.Year;});
+    return combinedYear;
+  };
+  
+  /** 
+   * year should be a string of the year to filter by
+   * returns an array of the filtered data
+   */
+  var filterYear = function(data, year) {
+    var yearFilter = new Array();
+    
+    data.forEach(function(r) {
+      if(r.Year != null && r.Year.trim() == year)
+        yearFilter.push(r);
+    });
+    
+    return yearFilter;
+  };
+  
+  /** 
+   * combines all the ethnicity data
+   * returns an array of objects with objects containing Ethnicity and [Female Count, Male Count]
+   */
+  var combineEthnicities = function(data) {
+    var combinedEthnicity = new Array();
+    
+    data.forEach(function(r) {
+      var ethnicity = r.Ethnicity;
+      var sex = r.Sex;
+      var count = Number(r.Count);
+      
+      //find index
+      var index = -1;
+    
+      combinedEthnicity.forEach(function(r, i) {
+        if(r.Ethnicity == ethnicity) {
+          index = i;
+        }
+      });
+      
+      //add to combine array
+      if(index == -1) {
+        if(sex == "Females")
+          combinedEthnicity.push({"Ethnicity": ethnicity, "Count": [count, 0]});
+        else if(sex == "Males")
+          combinedEthnicity.push({"Ethnicity": ethnicity, "Count": [0, count]});
+      }
+      else {
+        if(sex == "Females")
+          combinedEthnicity[index].Count[0] += count; 
+        else if(sex == "Males")
+          combinedEthnicity[index].Count[1] += count; 
+        
+      }
+    });
+    
+    combinedEthnicity.sort(function(a, b) {
+      if(a.Ethnicity > b.Ethnicity)
+        return 1;
+      else if(a.Ethnicity < b.Ethnicity)
+        return -1;
+      
+      return 0;
+    });
+    return combinedEthnicity;
+  };  
+  
+  /** 
+   * combines all the cause data
+   * returns a array of with Cause and array Values of objects {Year, Count}
+   */
+  var combineCauses = function(data) {
+    var combinedCauses = new Array();
+    
+    data.forEach(function(r) {
+      var cause = r.Cause;
+      var year = Number(r.Year);
+      var count = Number(r.Count);
+      
+      //find index
+      var index = -1;
+    
+      combinedCauses.forEach(function(r, i) {
+        if(r.Cause == cause) {
+          index = i;
+        }
+      });
+    
+      //add to combined array
+      if(index == -1) {
+        combinedCauses.push({"Cause": cause, "Values":
+          [{"Year": 2007, "Count": 0},
+           {"Year": 2008, "Count": 0},
+           {"Year": 2009, "Count": 0},
+           {"Year": 2010, "Count": 0},
+           {"Year": 2011, "Count": 0}]
+        });
+        
+        i = -2007 + year;
+        combinedCauses[combinedCauses.length - 1].Values[i].Count += count;
+      }
+      else {
+        i = -2007 + year;
+        combinedCauses[index].Values[i].Count += count;
+      }
+    });
+    
+    return combinedCauses;
+  };  
+  
+  
+  /**
+   * draws the cause area chart for count vs. year
+   */
+  var drawAreaChart2 = function(data, region) {
+    var year_max = 0;
+    var margin = {top: 40, right: 10, bottom: 60, left: 80},
+      width2 = 1300 - margin.left - margin.right,
+      height2 = 640 - margin.top - margin.bottom;
+    var parseDate = d3.time.format("%Y").parse,
+      formatPercent = d3.format(".0%");
+    
+  //scales
+    var x = d3.time.scale()
+      .domain([2007,2011])
+      .range([0, width2 * .57]);
+    var y = d3.scale.linear()
+      .range([height2, 0]);
+    var color = d3.scale.category20();
+  
+  //axis
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(function(d) { return d * 1; });
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickFormat(formatPercent);
+    
+  //area/stack functions
+    var area = d3.svg.area()
+      .x(function(d) { 
+        // console.log('1111111111111');
+        // console.log(d);
+        // console.log(d.date);
+        // console.log(parseInt(d.date));
+        // console.log(x(parseInt(d.date)));
+        return x(parseInt(d.date)); })
+      .y0(function(d) { 
+        //console.log(d);
+        //console.log('22222222222');
+        if (isNaN(d.y0)) {
+          d.y0 = 0;
+        }
+        // console.log(d);
+        // console.log(d.y0);
+        // console.log(y(d.y0))
+        
+        return y(d.y0); })
+      .y1(function(d) { 
+        //console.log('244444444');
+        if (isNaN(d.y0)) {
+          d.y0 = 0;
+        }
+        // console.log(d);
+        // console.log(d.y0);
+        // console.log(d.y);
+        // console.log(d.y0 + d.y);
+        // console.log(y(d.y0 + d.y));
+        
+        return y(d.y0 + d.y); });
+    var stack = d3.layout.stack()
+      .values(function(d) { return d.values; });
+    
+  //make svg
+    if(areaSvg == null) {
+      areaSvg = d3.select("#areachart").append("svg")
+      .attr("width", width2 + margin.left + margin.right)
+      .attr("height", height2 + margin.top + margin.bottom)
+      .append("g")
+      .attr("class", "area")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    }   
+    else
+      areaSvg.selectAll("*").remove();
+    //title/axis labels
+    areaSvg.append("text")
+    .attr('x', width2/3)
+    .attr('y', 0)
+    .text(region)
+  .style("font-size", "30px");
+    
+    areaSvg.append("text")
+    .attr('x', -height2/2)
+    .attr('y', -40) 
+    .attr("transform", "rotate(-90)")
+  .attr("class", "alabel")
+    .text("# of Deaths");
+        
+    areaSvg.append("text")
+    .attr('x', width2/3)
+    .attr('y', height2 + margin.bottom - 15)
+  .attr("class", "alabel")
+    .text("Year");
+	
+	areaSvg.append("text")
+    .attr('x', width2/2)
+    .attr('y', height2 + margin.bottom - 30)
+  .style("font-size", 10)
+    .text("(click for more information)");
+  
+  //process data to correct format for area/stack functions
+    var new_data = [];
+    var tmp = {};
+    new_data = data;
+   
+    var yy = [];
+    var c = [];
+    var cnt = [];
+    var count = 0;
+    
+    var tmpmax = {};
+    for(var i=0; i<=new_data.length-1; i++){
+      yy[i] = new_data[i]["Year"];
+      c[i] = new_data[i]["Cause"];
+      cnt[i] = new_data[i]["Count"];
+      if(tmp.hasOwnProperty(yy[i])){
+        if(tmp[yy[i]].hasOwnProperty(c[i])){
+          var tmpcnt = Number(tmp[yy[i]][c[i]]);
+          tmpcnt += Number(cnt[i]);
+          tmp[yy[i]][c[i]]=String(tmpcnt);
+        } else {
+          tmp[yy[i]][c[i]] = cnt[i];
+        }
+      } else {
+        tmp[yy[i]] = {};
+        tmp[yy[i]][c[i]] = cnt[i];
+      }
+    }
+    var keypool = {};
+    var keypoolarr = [];
+    var idx = 0;
+    // add all causes in one pool, and will be used for checking
+    for(var i=2007; i<=2011; i++){
+      for(var j=0; j<=d3.keys(tmp[i]).length; j++){
+      if(!(keypool.hasOwnProperty(d3.keys(tmp[i])[j]))&&d3.keys(tmp[i])[j]!==undefined) {
+        keypool[d3.keys(tmp[i])[j]] = idx;
+        keypoolarr[idx++] = d3.keys(tmp[i])[j];
+      }
+      }
+    }
+  
+  //sort data by causes alphabetically
+     keypoolarr.sort(function(a, b) {
+      if(a > b)
+        return 1;
+      else if(a < b)
+        return -1;
+      
+      return 0;
+    });
+  
+    var res = [];
+    for (var key in tmp) {
+      if (tmp.hasOwnProperty(key)) {
+      var oneRecord = {};
+      oneRecord["Year"] = key;
+      tmpmax = 0;
+      for (var cause in keypool) {
+        if (keypool.hasOwnProperty(cause)) {
+        if(tmp[key].hasOwnProperty(cause) && cause !="undefined"){
+          oneRecord[cause] = tmp[key][cause];
+          tmpmax += Number(tmp[key][cause]);
+        } else if( cause !== undefined ){
+          oneRecord[cause] = "0";
+          tmpmax += 0;
+        }
+        }
+      }
+      res.push(oneRecord);
+      if(tmpmax>year_max){
+        year_max=tmpmax;
+      }
+      }
+    }
+  
+  //draw area chart
+    color.domain(keypoolarr);
+    data.forEach(function(d) {
+      return d.Year;
+    });
+  var causes = stack(color.domain().map(function(name) {
+    return {
+      name: name,
+      values: res.map(function(d) {
+        if(isNaN(d[name])){
+          console.log(d);
+          console.log(name);
+        }
+        return {date: d.Year, y: d[name] / year_max};
+      })
+    };
+  }));
+  x.domain(d3.extent(res, function(d) { return d.Year; }));
+	
+  var cause = areaSvg.selectAll(".cause")
+    .data(causes)
+    .enter()
+    .append("g")
+    .attr("class", "cause")
+    .style("fill",function(d,i){ return color(i); });
+    
+    cause.append("path")
+    .attr("d", function(d) { return area(d.values); })
+    .style("opacity", .5)
+    .on("click", function(r) { 
+		//draw line chart
+        drawLineChart(data, r.name.trim());
+        //draw bar chart
+        var causeFilter = filterCause(data, r.name.trim());
+        drawBarChart(causeFilter,2007);
+        smoothScroll("#charts");
+    })
+    .on("mouseover", function(r) {
+        d3.select(this).style("opacity", 1);
+        d3.select(this.parentNode).select("circle").style("opacity",1);
+        d3.select(this.parentNode).select("text").style("opacity",1);
+        d3.select(this.parentNode).select("text").style("font-weight","bold");
+        d3.select(this.parentNode).select("text").style("font-size","16px");
+		    console.log(r.values);
+		    d3.select("#tooltip").text(r.name).style("left", margin.left + 20).style("top", y(r.values[0].y0 + r.values[0].y) + mapHeight + margin.top + 130);
+    })
+    .on("mouseout", function() {
+        d3.select(this).style("opacity", .5);
+        d3.select(this.parentNode).select("circle").style("opacity",.5);
+        d3.select(this.parentNode).select("text").style("opacity",.5);
+        d3.select(this.parentNode).select("text").style("font-weight","normal");
+        d3.select(this.parentNode).select("text").style("font-size","14px");
+    });
+  //draw legend
+    var labHeight = 10;
+    var labRadius = 5;
+    var labelCircle = cause.append("circle")
+    .attr("cx",function(d, i){ 
+    if((labHeight * 1.4 *i)>height2){
+      return width2*.57 + 255;
+    }
+    else{
+      return width2*.57 + 15;
+    }
+  })
+  .attr("cy",function(d,i){ return (labHeight * 1.4 *i)%height2; })
+  .attr("r",labRadius)
+  .style("opacity",.5)
+  .on("click", function(r) { 
+        d3.select("path").selectAll("text").style("display", "none");
+    
+        d3.select(this).select("text").style("display", "inline");
+    
+        //draw line chart
+        drawLineChart(data, r.name.trim());
+        //draw bar chart
+        var causeFilter = filterCause(data, r.name.trim());
+        drawBarChart(causeFilter,2007);
+        smoothScroll("#charts");
+    })
+    .on("mouseover", function() {
+        d3.select(this).style("opacity", 1);
+        d3.select(this.parentNode).select("path").style("opacity",1);
+        d3.select(this.parentNode).select("text").style("opacity",1);
+        d3.select(this.parentNode).select("text").style("font-weight","bold");
+        d3.select(this.parentNode).select("text").style("font-size","16px");
+    })
+    .on("mouseout", function() {
+        d3.select(this).style("opacity", .5);
+        d3.select(this.parentNode).select("path").style("opacity",.5);
+        d3.select(this.parentNode).select("text").style("opacity",.5);
+        d3.select(this.parentNode).select("text").style("font-weight","normal");
+        d3.select(this.parentNode).select("text").style("font-size","14px");
+    });
+
+    var labelText = cause.append("text")
+    .attr("x",function(d, i){ 
+      if((labHeight * 1.4 *i)>height2){
+        return width2*.57 + 265;
+      }
+      else{
+        return width2*.57 + 25;
+      }
+    })
+    .attr("y",function(d,i){ return (labHeight * 1.4 *i)%height2; })
+    .attr("dy",labRadius/2)
+    .style("opacity",.5)
+    .attr("class", "arealegend")
+    .text(function(d){ return d.name; })
+    .on("click", function(r) { 
+          d3.select("path").selectAll("text").style("display", "none");
+      
+          d3.select(this).select("text").style("display", "inline");
+      
+          //draw line chart
+          drawLineChart(data, r.name.trim());
+          //draw bar chart
+          var causeFilter = filterCause(data, r.name.trim());
+          drawBarChart(causeFilter,2007);
+          smoothScroll("#charts");
+      })
+      .on("mouseover", function() {
+          d3.select(this).style("opacity", 1);
+          d3.select(this).style("font-weight","bold");
+          d3.select(this).style("font-size","16px");
+          d3.select(this.parentNode).select("path").style("opacity",1);
+          d3.select(this.parentNode).select("circle").style("opacity",1);
+      })
+      .on("mouseout", function() {
+          d3.select(this).style("opacity", .5);
+          d3.select(this).style("font-weight","normal");
+          d3.select(this).style("font-size","14px");
+          d3.select(this.parentNode).select("path").style("opacity",.5);
+          d3.select(this.parentNode).select("circle").style("opacity",.5);
+      });
+
+      areaSvg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height2 + ")")
+    .call(xAxis);
+      areaSvg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+    
+  };
+    
+  var height = 620;
+  var width = 620;
+  var padding = 80;
+  
+  /**
+   * draws the line chart for count vs. year
+   */
+  var drawLineChart = function(data, cause) {
+    var causeFilter = filterCause(data, cause);
+    var causeFilterCombined = combineYear(causeFilter);
+    //clear svg
+    if(causeSvg == null) {
+      causeSvg = d3.select("#charts").append("svg")
+      .attr("height", height)
+      .attr("width", width);
+    }   
+    else
+      causeSvg.selectAll("*").remove();
+    
+    //scales
+    var xScale = d3.scale.ordinal()
+    .domain([2007, 2008, 2009, 2010, 2011])
+    .rangeRoundPoints([padding, width - padding], .6);
+    
+    var yScale = d3.scale.linear()
+    .domain([d3.min(causeFilterCombined, function(r) {return r.Count;}), d3.max(causeFilterCombined, function(r) {return r.Count;})])
+    .range([height - padding, padding]);
+    
+    //draw axis
+    var xAxis = d3.svg.axis().scale(xScale)
+    .orient("bottom");                
+    causeSvg.append("g").attr("class", "axis")
+    .attr("transform", "translate(0," + (height - padding) + ")")
+    .call(xAxis);
+        
+    var yAxis = d3.svg.axis().scale(yScale)
+    .orient("left");
+    causeSvg.append("g").attr("class", "axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis);
+    
+    //draw title/labels
+    causeSvg.append("text")
+    .attr('x', width/2)
+    .attr('y', padding/2)
+    .text(cause)
+  .style("font-size", "30px");
+    
+    causeSvg.append("text")
+    .attr('x', -height/2)
+    .attr('y', 20)
+    .attr("transform", "rotate(-90)") 
+  .attr("class", "alabel")
+    .text("# of Deaths");
+    
+    causeSvg.append("text")
+    .attr('x', width/2)
+    .attr('y', height - padding/2)
+  .attr("class", "alabel")  
+    .text("Year");
+        
+    //draw line
+    var line = d3.svg.line()
+    .x(function(r) { return xScale(r.Year); })
+    .y(function(r) { return yScale(r.Count); });
+        
+    causeSvg.append("path")
+    .attr("d", line(causeFilterCombined))
+    .style("fill", "none")
+    .style("stroke", "rgb(185, 185, 185)");
+    
+    //draw circles
+    var circles = causeSvg.selectAll().data(causeFilterCombined).enter().append("circle").attr("class","bubble");
+      
+    circles.attr("cx", function(r) { return xScale(r.Year); })
+    .attr("cy", function(r) { return yScale(r.Count); })
+    .attr("r", function(r) {return 20;})
+    .style("fill", function(r){ 
+      //start with 2007 highlighted
+    if (r.Year==2007) {
+        return "rgb(195, 88, 69)";
+      } 
+    })
+    .on("mouseover", function(r) {
+      //highlight selection on hover
+    d3.selectAll(".bubble")
+    .style("fill", "rgb(45, 162, 173)");
+    
+      d3.select(this)
+    .style("fill", "rgb(195, 88, 69)");
+    
+      //draw bar chart
+      drawBarChart(causeFilter, r.Year);
+    })
+  };
+  
+  /**
+   * draws the bar chart for count vs. ethnicity/gender
+   */
+  var drawBarChart = function(data, year) {
+    var yearFilter = filterYear(data, year);
+    var yearFilterCombined = combineEthnicities(yearFilter);
+    
+    //clear svg
+    if(yearSvg == null) {
+      yearSvg = d3.select("#charts").append("svg")
+      .attr("height", height)
+      .attr("width", width);
+    }
+    else
+      yearSvg.selectAll("*").remove();
+    
+    //scales
+    var ethArray = new Array();
+    yearFilterCombined.forEach(function(r) {
+      ethArray.push(r.Ethnicity);
+    });
+    
+    var xScale = d3.scale.ordinal()
+    .domain(ethArray)   
+    .rangeRoundPoints([padding, width - padding], .8);
+    
+    var yScale = d3.scale.linear()
+    .domain([0, d3.max(yearFilterCombined, function(r) {return Math.max(r.Count[0], r.Count[1]);})])
+    .range([height - padding, padding]);
+    
+    //draw bars
+    var barWidth = 30;
+    
+    yearSvg.selectAll(".bar")
+    .data(yearFilterCombined)
+    .enter().append("rect")
+    .attr("x", function(r) { return xScale(r.Ethnicity) - barWidth; })
+    .attr("width", barWidth)
+    .attr("y", function(r) { return yScale(r.Count[0]); })
+    .attr("height", function(r) { return height - padding - yScale(r.Count[0]); })
+    .attr("fill", "rgb(105, 191, 199)");
+    
+    yearSvg.selectAll(".bar")
+    .data(yearFilterCombined)
+    .enter().append("rect")
+    .attr("x", function(r) { return xScale(r.Ethnicity); })
+    .attr("width", barWidth)
+    .attr("y", function(r) { return yScale(r.Count[1]); })
+    .attr("height", function(r) { return height - padding - yScale(r.Count[1]); })
+    .attr("fill", "rgb(195, 88, 69)");
+    
+    //draw axis
+    var xAxis = d3.svg.axis().scale(xScale)
+    .orient("bottom");                
+    yearSvg.append("g").attr("class", "axis")
+    .attr("transform", "translate(0," + (height - padding) + ")")
+    .call(xAxis);
+        
+    var yAxis = d3.svg.axis().scale(yScale)
+    .orient("left");
+    yearSvg.append("g").attr("class", "axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis);
+    
+    //draw title/labels
+    yearSvg.append("text")
+    .attr('x', width/2)
+    .attr('y', padding/2)
+    .text(year) 
+    .style("font-size", "30px");
+    
+    yearSvg.append("text")
+    .attr('x', -height/2)
+    .attr('y', 20)
+    .attr("transform", "rotate(-90)") 
+  .attr("class", "alabel")
+    .text("# of Deaths");
+    
+     yearSvg.append("text")
+    .attr('x', width/2)
+    .attr('y', height - padding/2)
+    .attr("class", "alabel")  
+    .text("Ethnicity");
+  };
+  
+  </script>
+
+</head>
+
+<body>
+  <h1>Top Causes of Death in the U.S.</h1>
+  <h3>Select a region or New York City from the map</h3>
+  <div id="usmap"></div>
+  
+  <div id="detail">
+    <div id="areachart">
+    <h3>Select a cause of death</h3>
+    </div>
+		<div id="tooltip"> </div>
+	</div>
+    <div id="charts"></div>
+  </div>
+</body>
+</html>

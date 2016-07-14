@@ -1,131 +1,181 @@
-<!DOCTYPE html>
-<html ng-app="myApp">
-<head>
-<meta charset="utf-8"> 
-<title>Data Visualization</title>
-<link rel="stylesheet" href="style/style.css">
-<link rel="stylesheet" href="style/Grid.css">
-<script type="text/javascript" src="js/angular.min.js" ></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<!-- <script src="js/text.js"></script> -->
-<script src="js/app.js"></script>
+<!doctype html>
 
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>Frankの创意板</title>
+  <meta name="description" content="THOMSOON with no sidebar - Portfolio with grid HTML5 and CSS3 modern simplicity style template. Check my portfolio. Download free now with file Photoshop! ">
+  <meta name="keywords" content="clean, simplicity, theme, html5, sidebar, masonry">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="author" content="thomsoon.com">
+  <link rel="icon" type="image/png" href="img/icon.png" />
+
+<!--Style-->
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style-responsive.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
 </head>
 
-<body ng-controller="myCtrl">
+<body>
 
-  <div class="container">
-    <div class="row">
-      <!-- <div class="col-12" id="landpage">
-        <canvas id="c"></canvas>
-      </div> -->
-    </div>
-    <div id="wrap">
-    <div class="row">
-      <div class="col-10 col-offset-1">
-        <div class="header">
-          <h1>创投行业关系及布局分析</h1>
-          <p id="intro1">数据来源:<a href="https://www.itjuzi.com/">IT桔子</a>&nbsp&nbsp数据截止2016.4.23</p>
-        </div>
+<!--Preloader-->
+
+<div class="preloader" id="preloader">
+    <div class="item">
+      <div class="spinner">
       </div>
     </div>
-    <section>
-      <div class="row">
-        
-        <div class="col-6" id="bubbles">
-          <h1 class="colorYellow tipName">投资次数大于{{threshold}}</h1>
-          <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
-          <h1 class="colorYellow tipName">{{vcName}}</h1>
+</div>
+
+
+  <!--Header-->
+  <header id="fullscreen">
+    
+      <div class="logo" id="full"><a class="ajax-link" href="index.html">Frankの创意板</a></div>
+      <ul class="header-nav">
+        <!-- <li><a class="ajax-link" href="projects.html">项目经历</a></li> -->
+        <li><a href="about-me.html">个人简历</a></li>
+        <li><a href="http://www.linkedin.com/in/benran-fan-95a17978">LinkedIn</a></li>
+      </ul>
+      
+  </header>
+
+  <div class="clear"></div>
+
+  <!--Content-->
+
+  <div class="content" id="ajax-content">
+
+
+        <div class="text-intro" id="site-type">
+
+          <h1>WELCOME TO MY<br>CREATIVE SPACE AS A </h1>
+          <h1 class="typewrite"><span>Portfolio</span></h1>
         </div>
-        <div class="col-6" id="firms">
-          <div class="guide" ng-if="!flag">
-            <p>数据分析包括各投资方投资<span id="yellow1">次数</span>及<span id="yellow2">共同投资</span>关系，通过网络拓扑图连接，表示各投资方之间<span id="yellow3">相互关系</span></p>
-            <p>点击左侧公司<span id="yellow4">气泡</span>查看详细投资信息</p>
+
+
+  <!--Portfolio grid-->
+
+  <ul class="portfolio-grid">
+
+    
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/savorlink.jpg">
+        <a class="ajax-link" href="single.html">  
+          <div class="grid-hover">
+            <h1>SavorLink美食共享平台</h1>
+            <p>产品设计 | 创业项目</p>
           </div>
-          <div ng-if="flag">
-        	<ul class="firmTitle" ng-if="combinations">
-        		<li>
-          		<strong>
-          		<span>被投公司</span>
-          		<span>投资时间</span>
-          		<span>投资轮次</span>
-          		<span>投资领域</span>
-          		<span>投资金额</span>
-          		</strong>
-          	</li>
-        	</ul>
-          <ul class="firmList">
-          	<li ng-repeat="combination in combinations">
-          		<span>{{combination.title}}</span>
-          		<span>{{combination.date}}</span>
-          		<span>{{combination.round}}</span>
-          		<span>{{combination.domain}}</span>
-          		<span>{{combination.amount}}</span>
-          	</li>
-          </ul>
+        </a>  
+    </li>
+
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/csc.jpg">
+        <a class="ajax-link" href="csc.html">  
+          <div class="grid-hover">
+            <h1>中信建投证券 ｜ 微交易</h1>
+            <p>产品经理 | 实习项目</p>
           </div>
-        </div>
+        </a>      
+    </li>  
 
-      </div>
-    </section>
-
-
-    <section>
-      <div class="row">
-        <div class="col-12">
-          <h1 class="trend">各<span class="yellowTrend">领域</span>投资次数变化趋势</h1>
-          <h1 id="intro2"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>
-          <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
-            <option value="全部">全部</option>
-            <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
-          </select>
-
-        </div>
-        <div class="col-12">
-            <h1 id="selection"></h1>
-            <div id="lineChart">
-              <svg id="lineVisu" width="1000" height="400"></svg>
-            </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <h1 class="trend">各<span class="yellowTrend">轮次</span>投资次数变化趋势</h1>
-          <h1 id="intro3"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>            
-          <div id="barChart">
-            <svg id="barVisu" width="1000" height="400"></svg>
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/orange.jpg">
+        <a class="ajax-link" href="Orange/orange.html">  
+          <div class="grid-hover">
+            <h1>风险投资数据可视化</h1>
+            <p>网页设计&数据可视化 | 设计练习</p>
           </div>
-        </div>
-      </div>
-    </section>
+        </a>      
+    </li>    
+    
+    
+    
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/picpulse.jpg">
+        <a class="ajax-link" href="single.html">  
+          <div class="grid-hover">
+            <h1>Picpulse.com</h1>
+            <p>前端开发&产品设计 | 实习项目</p>
+          </div>
+        </a>      
+    </li>    
+
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/disease.jpg">
+        <a class="ajax-link" href="Disease/disease.html">  
+          <div class="grid-hover">
+            <h1>美国人口死亡原因数据可视化</h1>
+            <p>前端开发&数据可视化 | 课程项目</p>
+          </div>
+        </a>      
+    </li>    
+
+    <li class="grid-item" data-jkit="[show:delay=3000;speed=500;animation=fade]">
+      <img src="img/portfolio/solescription.jpg">
+        <a class="ajax-link" href="solescription.html">  
+          <div class="grid-hover">
+            <h1>Solescription.com</h1>
+            <p>产品设计&开发 | 外包项目</p>
+          </div>
+        </a>      
+    </li>  
+
+  </ul>
+
   </div>
 
+  <div id="ajax-sidebar"></div>
 
-  <div id="footer">
-      <div class="row">
-          <div class="author col-6">
-            <p>Created By <span><a href="https://www.linkedin.com/in/benran-fan-95a17978?authType=NAME_SEARCH&authToken=ZtAJ&locale=en_US&srchid=2751214301462161709750&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A2751214301462161709750%2CVSRPtargetId%3A275121430%2CVSRPcmpt%3Aprimary%2CVSRPnm%3Atrue%2CauthType%3ANAME_SEARCH">Benran Fan</a></span> & <a href="http://www.wuyue54.com/">Yanpu Wu</a></p>
-            <p>bf295@cornell.edu & yw753@cornell.edu</p>
-          </div>
-        <div class="support col-6">
-            <p>Crawler Supported By <span><a href="https://www.linkedin.com/in/wenying45?authType=NAME_SEARCH&authToken=en0K&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A358687678%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1462161768772%2Ctas%3Aying%20wen">Ying Wen</a></span></p>
-            <p>ying.wen@cs.ucl.ac.uk</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="copyright col-12">
-          <h5>© 2016 BENRAN FAN & YANPU WU</h5>
-        </div>
-      </div>
-  </div>
+  <!--Footer-->
 
+  <footer>
+
+    <div class="footer-margin">
+      <div class="social-footer">
+        <a href="https://www.facebook.com/thomsooncom"><i class="fa fa-facebook"></i></a>
+        <a href="https://www.behance.net/TomaszMazurczak"><i class="fa fa-behance"></i></a>
+      
+      </div>     
+      <div class="copyright">© Copyright 2016 Benran Fan All Rights Reserved.</div>
+      
+
+    
+    </div>
 
 
-  </div>
+  </footer>
 
 
+
+<!--Scripts-->
+
+  <script src="js/jquery.min.js"></script>
+	<script src="js/jquery.easing.min.js"></script>
+	<script src="js/modernizr.custom.42534.js" type="text/javascript"></script>
+  <script src="js/jquery.waitforimages.js" type="text/javascript"></script>
+  <script src="js/typed.js" type="text/javascript"></script>
+  <script src="js/masonry.pkgd.min.js" type="text/javascript"></script>  
+  <script src="js/imagesloaded.pkgd.min.js" type="text/javascript"></script>    
+  <script src="js/jquery.jkit.1.2.16.min.js"></script>
+ 
+  <script src="js/script.js" type="text/javascript"></script>
+  
+	<script>
+    $('#button').on('click', function() {
+      $( ".opacity-nav" ).fadeToggle( "slow", "linear" );
+    // Animation complete.
+    });
+  </script>
 
 
 </body>
-
 </html>
