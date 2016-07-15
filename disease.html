@@ -1,10 +1,12 @@
 <html>
 <head>
+  <meta charset="utf-8">
+  <title>Frankの创意板-美国人口死亡原因数据可视化</title>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
   <!-- Load the d3 library. -->
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="js/jquery.min.js"></script>
   
   <style>
     body { 
@@ -38,6 +40,34 @@
       text-align: center;
       margin-bottom: 10px;
     }
+
+    .nav-work{
+      width: 80%;
+      height: 80px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .nav-previous{
+      float: left;
+      text-decoration: underline;
+      color: #c3c3c3;
+    }
+
+    .nav-previous:hover{
+      color: #000;
+    }
+
+    .nav-next{
+      float: right;
+      text-decoration: underline;
+      color: #c3c3c3;
+    }
+
+    .nav-next:hover{
+      color: #000;
+    }
+
     #detail {
       margin-bottom: 90px;
       padding-top: 10px;
@@ -95,14 +125,14 @@
   var statesCoord;
   var states;
   
-  d3.json("us.json", function(error, shapes) {  
+  d3.json("data/us.json", function(error, shapes) {  
     statesCoord = topojson.feature(shapes, shapes.objects.states).features; //long/lat coordinates
     
-    d3.csv("usregions.csv", function(error, rows) {
+    d3.csv("data/usregions.csv", function(error, rows) {
       states = d3.map(rows,function(d){
         return d.id;
       })
-      console.log(states);
+      // console.log(states);
       var mapSvg = d3.select("#usmap").append("svg")
         .attr("width", mapWidth)
         .attr("height", mapHeight);
@@ -132,7 +162,7 @@
       })
       .on("click",function(d){
           var regionName = d3.select(this).attr("class");
-          d3.csv("USDeathsProcessed.csv", function(error,row) {
+          d3.csv("data/USDeathsProcessed.csv", function(error,row) {
             var regionFilter;
             
             if(regionName=="Northeast")
@@ -165,7 +195,7 @@
           d3.select(this).style("fill","#69BFC7");
         })
         .on("click", function() {
-          d3.csv("NYCDeaths.csv", function(error, rows) { 
+          d3.csv("data/NYCDeaths.csv", function(error, rows) { 
             drawAreaChart2(rows, "New York City");
           });
           smoothScroll("#detail");
@@ -863,6 +893,10 @@
 </head>
 
 <body>
+  <div class="nav-work">
+    <a href="solescription.html"><h3 class="nav-previous">Previous Work</h3></a>
+    <h3 class="nav-next">Next Work</h3>
+  </div>
   <h1>Top Causes of Death in the U.S.</h1>
   <h3>Select a region or New York City from the map</h3>
   <div id="usmap"></div>
